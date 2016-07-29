@@ -62,7 +62,9 @@
         </div>
         <div class="rightBox">
             <div class="groupBox">
-                <p class="groupName">小组名称<input type="text" value="名称"></p>
+                <p class="groupName">小组名称
+                    <input type="text" value="名称">
+                </p>
                 <div class="rightTable">
                     <div class="tableHeader">
                         <div class="studyNum">学号</div><span class="studentName">名称</span></div>
@@ -74,6 +76,45 @@
     </div>
 </body>
 <script>
-    $(".mainBody").dragS();
+$(".mainBody").dragS({
+    player:".leftTable,.rightTable",
+    // giver: ".leftTable",
+    noDragElement: ".tableHeader",
+    // receiver: ".rightTable",
+    chooseElement:function($this){
+        $this.find('input').prop("checked", true);
+    },
+    cancelChoose:function($this){
+        $this.find('input').prop("checked", false);
+    }
+});
+// 点击checkbox（特例）
+$(".mainBody").on('click', '.dragGiver input', function(event) {
+    event.stopPropagation();
+    if ($(this).prop("checked") == true) {
+        $(this).parents(".dragElement").chosenDragElement();
+    } else {
+        $(this).parents(".dragElement").removeChosenElement();
+    }
+});
+// 点击全选
+$("#selectAll").on('click', function(event) {
+    if ($(this).prop("checked") == true) {
+        $(".dragGiver .dragElement").chosenDragElement();
+    } else {
+        $(".dragGiver .dragElement").removeChosenElement();
+    }
+});
+// // 右侧点击返回
+// $(".rightBox").on('click', '.chosenDragElement input', function(event) {
+//     $(".dragGiver").append($(this).parents(".dragElement"));
+// });
+// 点击新增组
+$(".addGroup").on('click', function(event) {
+    event.preventDefault();
+    $(this).before('<div class="groupBox"><p class="groupName">小组名称<input type="text" value="名称"></p><div class="rightTable"><div class="tableHeader"><div class="studyNum">学号</div><span class="studentName">名称</span></div></div></div>');
+    $.fn.dragS.initArea();
+});
 </script>
+
 </html>
