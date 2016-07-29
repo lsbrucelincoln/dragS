@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style/reset.css">
+    <link rel="stylesheet" href="./style/index.css">
+    <script src="./script/jquery-1.7.2.min.js"></script>
+    <script src="../dragS.js"></script>
+</head>
+
+<body>
+    <div class="mainBody">
+        <div class="leftBox">
+            <input type="checkBox" id="selectAll"><span>全选</span>
+            <!-- <div class="chosenTable" draggable="true"></div> -->
+            <div class="leftTable" draggable="true">
+                <div class="tableHeader">
+                    <div class="studyNum">学号</div><span class="studentName">名称</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">1
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">2
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">3
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">4
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">5
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">6
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">7
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">8
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">9
+                    </div><span class="studentName">林森</span></div>
+                <div class="tableRow">
+                    <div class="studyNum">
+                        <input type="checkBox">10
+                    </div><span class="studentName">林森</span></div>
+            </div>
+        </div>
+        <div class="rightBox">
+            <div class="groupBox">
+                <p class="groupName">小组名称
+                    <input type="text" value="名称">
+                </p>
+                <div class="rightTable">
+                    <div class="tableHeader">
+                        <div class="studyNum">学号</div><span class="studentName">名称</span></div>
+                </div>
+            </div>
+            <div class="addGroup">+</div>
+        </div>
+        <div class="selection"></div>
+    </div>
+</body>
+<script>
+$(".mainBody").dragS({
+    player:".leftTable,.rightTable",
+    // giver: ".leftTable",
+    noDragElement: ".tableHeader",
+    // receiver: ".rightTable",
+    chooseElement:function($this){
+        $this.find('input').prop("checked", true);
+    },
+    cancelChoose:function($this){
+        $this.find('input').prop("checked", false);
+    }
+});
+// 点击checkbox（特例）
+$(".mainBody").on('click', '.dragGiver input', function(event) {
+    event.stopPropagation();
+    if ($(this).prop("checked") == true) {
+        $(this).parents(".dragElement").chosenDragElement();
+    } else {
+        $(this).parents(".dragElement").removeChosenElement();
+    }
+});
+// 点击全选
+$("#selectAll").on('click', function(event) {
+    if ($(this).prop("checked") == true) {
+        $(".dragGiver .dragElement").chosenDragElement();
+    } else {
+        $(".dragGiver .dragElement").removeChosenElement();
+    }
+});
+// // 右侧点击返回
+// $(".rightBox").on('click', '.chosenDragElement input', function(event) {
+//     $(".dragGiver").append($(this).parents(".dragElement"));
+// });
+// 点击新增组
+$(".addGroup").on('click', function(event) {
+    event.preventDefault();
+    $(this).before('<div class="groupBox"><p class="groupName">小组名称<input type="text" value="名称"></p><div class="rightTable"><div class="tableHeader"><div class="studyNum">学号</div><span class="studentName">名称</span></div></div></div>');
+    $.fn.dragS.initArea();
+});
+</script>
+
+</html>

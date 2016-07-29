@@ -1,0 +1,64 @@
+@tagcolor:#2CDB87;
+@buttoncommonRadius: 5px;
+@transitionDefaultSet: 0.2s linear;
+@tagblue:#d6f5f5;
+@textColor:#666;
+@mainColor:#7ed321;
+@redColor:#d0021b;
+@lineColor:#eee;
+@deepgreen:#43ac43;
+.ellipsis{
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.mutilEllipsis(@n){
+	overflow : hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: @n;
+	-webkit-box-orient: vertical;
+}
+.viewTransitionSet{
+	transition: @transitionDefaultSet;
+	-webkit-transition: @transitionDefaultSet;
+	-moz-transition: @transitionDefaultSet;
+	-ms-transition: @transitionDefaultSet;
+	-o-transition: @transitionDefaultSet;
+}
+.centerHeight(@height){
+	height: @height;
+	line-height: (@height - 2);
+	text-align: center;
+}
+.border(@color:@lineColor){
+	border:1px solid @color;
+}
+.bb(@color:@lineColor){
+	border-bottom:1px solid @color;
+}
+.center(@width){
+	width:@width;
+	position: relative;
+	left:50%;
+	margin-left: -@width / 2;
+}
+.after{
+	&:after{
+		content:'';
+		display: block;
+		clear: both;
+	}
+}
+.veryCenter{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	-webkit-transform: translate(-50%,-50%);
+}
+
+
+
+
+

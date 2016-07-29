@@ -1,0 +1,23 @@
+{
+  "name": "drag-s",
+  "version": "0.1.0",
+  "description": "It is a library to combine the usage of selection and drag. It is useful for use selection to select multiple elements and then drag them to another box. I do not know why I can not find library to solve this kind of need which I think is quite common.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lsbrucelincoln/dragS.git"
+  },
+  "keywords": [
+    "selection",
+    "drag"
+  ],
+  "author": "lsbrucelincoln",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lsbrucelincoln/dragS/issues"
+  },
+  "homepage": "https://github.com/lsbrucelincoln/dragS#readme"
+}
