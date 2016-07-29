@@ -1,6 +1,7 @@
 # DragS
 框选+拖拽，实现多元素拖拽的插件
-
+##[demo](https://lsbrucelincoln.github.io/dragS/demo/index.html)
+(尚未美化，好丑，囧) 
 ## 快速上手
 ### 引入文件
 ```html
