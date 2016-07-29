@@ -24,6 +24,8 @@ $(".mainBody").dragS({
         mode: "normal", //normal,strict两种模式（还未实现）
         dragElement: ".table",
         noDragElement: ".tableHeader",
+        chooseElement: function($this) {},
+        cancelChoose: function($this) {} 
     });
 ```
 ### player
