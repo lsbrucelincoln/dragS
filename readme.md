@@ -1,6 +1,7 @@
 # DragS
 框选+拖拽，实现多元素拖拽的插件
-
+##[demo](https://lsbrucelincoln.github.io/dragS/demo/index.html)
+(尚未美化，好丑，囧) 
 ## 快速上手
 ### 引入文件
 ```html
@@ -23,6 +24,8 @@ $(".mainBody").dragS({
         mode: "normal", //normal,strict两种模式（还未实现）
         dragElement: ".table",
         noDragElement: ".tableHeader",
+        chooseElement: function($this) {},
+        cancelChoose: function($this) {} 
     });
 ```
 ### player
