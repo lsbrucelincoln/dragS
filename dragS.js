@@ -7,7 +7,7 @@
         player: null, //可以拖出元素也可以接受元素
         giver: null,
         receiver: null,
-        mode: "nornal", //normal,strict两种模式
+        mode: "normal", //normal,strict两种模式
         dragElement: null,
         noDragElement: null,
         chooseElement: function($this) {},
@@ -99,6 +99,12 @@
                         $(".dragSelection").css({
                             left: e.clientX,
                             top: e.clientY + $("body").scrollTop()
+                        });
+                    }
+                    if (e.clientX - oldX > 0 && e.clientY - oldY > 0) {
+                        $(".dragSelection").css({
+                            left: oldX,
+                            top: oldY + $("body").scrollTop()
                         });
                     }
                 }
