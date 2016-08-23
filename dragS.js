@@ -11,7 +11,13 @@
         dragElement: null,
         noDragElement: null,
         chooseElement: function($this) {},
-        cancelChoose: function($this) {}
+        cancelChoose: function($this) {},
+        beforeInsert:function($this){
+            console.log($this.find('.dragElement').length);
+        },
+        afterInsert:function($this){
+            console.log($this.find('.chosenDragElement').length);
+        }
     };
 
     function init(option) {
@@ -25,14 +31,16 @@
         that.insertSelection();
         that.initBind();
     }
-    function writeElementPlace() {
+    function writeElementPlace(element) {
         var leftList = [];
+        var parsentX=element.offset().left;
+        var parsentY=element.offset().top;
         $(".dragElement").each(function(index, el) {
             leftList[index] = {};
-            leftList[index].y1 = $(el).offset().top;
-            leftList[index].y2 = $(el).offset().top + $(el).height();
-            leftList[index].x1 = $(el).offset().left;
-            leftList[index].x2 = $(el).offset().left + $(el).width();
+            leftList[index].y1 = $(el).offset().top-parsentY;
+            leftList[index].y2 = $(el).offset().top + $(el).height()-parsentY;
+            leftList[index].x1 = $(el).offset().left-parsentX;
+            leftList[index].x2 = $(el).offset().left + $(el).width()-parsentX;
         });
         return leftList;
     }
@@ -59,7 +67,10 @@
         initBind: function() {
             var that = this;
             var $this = that.$this;
+            var parsentX=$this.offset().left;
+            var parsentY=$this.offset().top;
             var oldX, oldY;
+            $this.css('position', 'relative');
             $this.on('mousedown', function(e) {
                 console.log(that.startMove);
                 if (!that.startMove) {
@@ -68,55 +79,54 @@
                 }
                 that.startMove = false;
                 console.log('down');
-                oldX = e.clientX;
-                oldY = e.clientY;
+                oldX = e.pageX;
+                oldY = e.pageY;
                 $(".dragSelection").css({
-                    left: oldX,
-                    top: oldY + $("body").scrollTop()
+                    left: oldX-parsentX,
+                    top: oldY-parsentY
                 }).css('border', '1px solid #000');
                 that.isDrag = true;
             });
-            $this.on('mousemove', function(e) {
+            $("body").on('mousemove', function(e) {
                 if (!that.isDrag) return false;
                 if (!that.hasChosen) {
                     $(".dragSelection").show().css({
-                        width: Math.abs(e.clientX - oldX),
-                        height: Math.abs(e.clientY - oldY)
+                        width: Math.abs(e.pageX - oldX),
+                        height: Math.abs(e.pageY - oldY)
                     });
-                    if (e.clientY - oldY < 0 && e.clientX - oldX > 0) {
+                    if (e.pageY - oldY < 0 && e.pageX - oldX > 0) {
                         $(".dragSelection").css({
-                            left: oldX,
-                            top: e.clientY + $("body").scrollTop()
+                            left: oldX-parsentX,
+                            top: e.pageY-parsentY
                         });
                     }
-                    if (e.clientX - oldX < 0 && e.clientY - oldY > 0) {
+                    if (e.pageX - oldX < 0 && e.pageY - oldY > 0) {
                         $(".dragSelection").css({
-                            left: e.clientX,
-                            top: oldY + $("body").scrollTop()
+                            left: e.pageX-parsentX,
+                            top: oldY-parsentY
                         });
                     }
-                    if (e.clientX - oldX < 0 && e.clientY - oldY < 0) {
+                    if (e.pageX - oldX < 0 && e.pageY - oldY < 0) {
                         $(".dragSelection").css({
-                            left: e.clientX,
-                            top: e.clientY + $("body").scrollTop()
+                            left: e.pageX-parsentX,
+                            top: e.pageY-parsentY
                         });
                     }
-                    if (e.clientX - oldX > 0 && e.clientY - oldY > 0) {
+                    if (e.pageX - oldX > 0 && e.pageY - oldY > 0) {
                         $(".dragSelection").css({
-                            left: oldX,
-                            top: oldY + $("body").scrollTop()
+                            left: oldX-parsentX,
+                            top: oldY-parsentY
                         });
                     }
                 }
             });
-            $this.on('mouseup', function(e) {
+            $("body").on('mouseup', function(e) {
                 if (!that.isDrag) return false;
                 // if (hasChosen) return false;
-                console.log('up');
                 that.isDrag = false;
                 $(".dragSelection").hide().css({
-                    width: Math.abs(e.clientX - oldX),
-                    height: Math.abs(e.clientY - oldY)
+                    width: Math.abs(e.pageX - oldX),
+                    height: Math.abs(e.pageY - oldY)
                 });
                 // console.log(that.leftList);
                 for (var i = 0; i < that.leftList.length; i++) {
@@ -148,6 +158,13 @@
                 that.startMove = true;
                 console.log(that.startMove);
             });
+            $(document).on('selectstart', function(event) {
+                if(that.isDrag){
+                // console.log('selectstart');
+                event.preventDefault();
+                return true;
+                }
+            });
             // html5 drag方法
             var eleDrag;
             $this.on('dragstart', ".dragGiver", function(e) {
@@ -168,11 +185,13 @@
                 $(".selection").hide();
             });
             $this.on('drop', ".dragReceiver", function(e) {
-                console.log('test');
+                that.o.beforeInsert($(this));
+                var parents=$(".chosenDragElement").parents(".dragGiver");
                 $(this).append($(".dragGiver").children(".chosenDragElement"));
+                that.o.afterInsert(parents);
                 that.hasChosen = false;
                 that.isDrag = false;
-                that.leftList = writeElementPlace();
+                that.leftList = writeElementPlace(that.$this);
                 $(".dragGiver .dragElement").removeChosenElement();
             });
         },
@@ -239,7 +258,7 @@
             if (o.noDragElement) {
                 $(".dragGiver").children(o.noDragElement).removeClass('dragElement');
             }
-            that.leftList = writeElementPlace();
+            that.leftList = writeElementPlace(that.$this);
         },
     })
     $.fn.dragS = function(option) {
